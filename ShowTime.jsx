@@ -1,8 +1,10 @@
 import React from "react";
-const ShowTime = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-2">Show Time</h2>
-    <p>Show animal tracking will go here (coming soon).</p>
-  </div>
-);
-export default ShowTime;
+
+export default function ShowTime() {
+  return (
+    <div>
+      <h2>Show Time</h2>
+      <p style={{ color: "#555" }}>Show animal tracking coming soon…</p>
+    </div>
+  );
+}
