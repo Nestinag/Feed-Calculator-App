@@ -1,8 +1,10 @@
 import React from "react";
-const CurrentProgress = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-2">Current Progress</h2>
-    <p>Progress tracking features will go here (coming soon).</p>
-  </div>
-);
-export default CurrentProgress;
+
+export default function CurrentProgress() {
+  return (
+    <div>
+      <h2>Current Progress</h2>
+      <p style={{ color: "#555" }}>Progress tracking features coming soon…</p>
+    </div>
+  );
+}
