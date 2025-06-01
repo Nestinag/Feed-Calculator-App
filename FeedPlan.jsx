@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const FeedPlan = () => {
+export default function FeedPlan() {
   const [livestockGroups, setLivestockGroups] = useState([
     {
       type: "Cattle",
@@ -21,10 +21,10 @@ const FeedPlan = () => {
     "Supplements",
   ];
 
-  const updateGroup = (index, field, value) => {
-    const updated = [...livestockGroups];
-    updated[index][field] = value;
-    setLivestockGroups(updated);
+  const updateGroup = (i, field, value) => {
+    const copy = [...livestockGroups];
+    copy[i][field] = value;
+    setLivestockGroups(copy);
   };
 
   const addGroup = () => {
@@ -41,93 +41,112 @@ const FeedPlan = () => {
     ]);
   };
 
-  const removeGroup = (index) => {
-    const updated = [...livestockGroups];
-    updated.splice(index, 1);
-    setLivestockGroups(updated);
+  const removeGroup = (i) => {
+    setLivestockGroups(livestockGroups.filter((_, idx) => idx !== i));
   };
 
-  const calculateTotalFeed = (group) => {
-    return group.count * group.dailyFeedPerAnimal * group.durationDays;
-  };
+  const calculateTotalFeed = (grp) =>
+    grp.count * grp.dailyFeedPerAnimal * grp.durationDays;
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-2">Feed Plan</h2>
-      {livestockGroups.map((group, index) => (
-        <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
-          <div className="grid grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Livestock Type (e.g., Goats)"
-              className="border p-2 rounded"
-              value={group.type}
-              onChange={(e) => updateGroup(index, "type", e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="Head Count"
-              className="border p-2 rounded"
-              value={group.count}
-              onChange={(e) => updateGroup(index, "count", parseInt(e.target.value))}
-            />
-            <input
-              type="text"
-              placeholder="Health Status"
-              className="border p-2 rounded"
-              value={group.healthStatus}
-              onChange={(e) => updateGroup(index, "healthStatus", e.target.value)}
-            />
-            <select
-              className="border p-2 rounded"
-              value={group.feedType}
-              onChange={(e) => updateGroup(index, "feedType", e.target.value)}
-            >
-              {feedOptions.map((option) => (
-                <option key={option}>{option}</option>
-              ))}
-            </select>
-            <input
-              type="number"
-              placeholder="Daily Feed per Animal (lbs)"
-              className="border p-2 rounded"
-              value={group.dailyFeedPerAnimal}
-              onChange={(e) =>
-                updateGroup(index, "dailyFeedPerAnimal", parseFloat(e.target.value))
-              }
-            />
-            <input
-              type="number"
-              placeholder="Days Planned"
-              className="border p-2 rounded"
-              value={group.durationDays}
-              onChange={(e) =>
-                updateGroup(index, "durationDays", parseInt(e.target.value))
-              }
-            />
+      <h2>Feed Plan</h2>
+
+      {livestockGroups.map((grp, idx) => (
+        <div key={idx} className="group-card">
+          <div className="grid-2">
+            <div>
+              <label>Livestock Type</label>
+              <input
+                type="text"
+                placeholder="e.g., Goats"
+                value={grp.type}
+                onChange={(e) => updateGroup(idx, "type", e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label>Head Count</label>
+              <input
+                type="number"
+                placeholder="0"
+                value={grp.count}
+                onChange={(e) =>
+                  updateGroup(idx, "count", parseInt(e.target.value))
+                }
+              />
+            </div>
+
+            <div>
+              <label>Health Status</label>
+              <input
+                type="text"
+                placeholder="e.g., Healthy"
+                value={grp.healthStatus}
+                onChange={(e) =>
+                  updateGroup(idx, "healthStatus", e.target.value)
+                }
+              />
+            </div>
+
+            <div>
+              <label>Feed Type</label>
+              <select
+                value={grp.feedType}
+                onChange={(e) => updateGroup(idx, "feedType", e.target.value)}
+              >
+                {feedOptions.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label>Daily Feed/Animal (lbs)</label>
+              <input
+                type="number"
+                placeholder="0"
+                value={grp.dailyFeedPerAnimal}
+                onChange={(e) =>
+                  updateGroup(idx, "dailyFeedPerAnimal", parseFloat(e.target.value))
+                }
+              />
+            </div>
+
+            <div>
+              <label>Days Planned</label>
+              <input
+                type="number"
+                placeholder="0"
+                value={grp.durationDays}
+                onChange={(e) =>
+                  updateGroup(idx, "durationDays", parseInt(e.target.value))
+                }
+              />
+            </div>
           </div>
-          <p className="mt-2">
+
+          <p>
             Total Feed Needed:{" "}
-            <span className="font-semibold text-blue-600">
-              {calculateTotalFeed(group).toLocaleString()} lbs
-            </span>
+            <strong>
+              {calculateTotalFeed(grp).toLocaleString()} lbs
+            </strong>
           </p>
+
           <button
-            onClick={() => removeGroup(index)}
-            className="text-sm text-red-600 mt-1"
+            onClick={() => removeGroup(idx)}
+            className="button-secondary"
           >
             Remove Group
           </button>
         </div>
       ))}
-      <button
-        onClick={addGroup}
-        className="bg-green-600 text-white px-4 py-2 rounded shadow"
-      >
-        Add Livestock Group
+
+      <button onClick={addGroup} className="button-primary">
+        + Add Livestock Group
       </button>
     </div>
   );
-};
-
-export default FeedPlan;
+}
